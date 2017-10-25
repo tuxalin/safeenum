@@ -1,7 +1,10 @@
 
 #include <iostream>
 
-#include "../safe_enum.h"
+//redefine assert macro to log instead
+#define SAFE_ENUM_ASSERT(cond, msg) if(!cond) std::cout << msg << "\n"
+
+#include <safe_enum.h>
 
 //normal declaration
 SAFE_ENUM_DECLARE(Shape,
@@ -24,6 +27,8 @@ bool Color_def::hasRed() const
 	Color col = static_cast<const Color&>(*this);
 	return col.get() & Color::eRed;
 }
+
+// TODO: make unit tests out of these
 
 int main()
 {
@@ -51,7 +56,7 @@ int main()
 	// iterate through all enum values, non-contiguous, prints: 3 1 5
 	for (Shape8::iterator it = Shape8::first(); it != Shape8::last(); ++it)
 	{
-		std::cout << it->get() << " ";
+		std::cout << (int)it->get() << " ";
 	}
 	std::cout << "\n";
 
