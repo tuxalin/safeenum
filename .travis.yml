@@ -6,7 +6,6 @@ language: cpp
 
 matrix:
   include:
-	#gcc
 	- compiler: gcc
       addons:
         apt:
@@ -23,7 +22,6 @@ matrix:
           packages:
             - g++-5
       env: COMPILER=g++-5
-	#clang
 	- compiler: clang
       addons:
         apt:
