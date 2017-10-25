@@ -7,12 +7,12 @@
 #include <safe_enum.h>
 
 //normal declaration
-SAFE_ENUM_DECLARE(Shape,
-				  eCircle, eSquare, eTriangle);
+SAFE_ENUM_DECLARE(Shape, 
+                  eCircle, eSquare, eTriangle);
 
 //or you can also declare an enum class using unsigned char
-SAFE_ENUM_TYPE_DECLARE(Shape8, unsigned char,
-					   eCircle = 3, eSquare = 1, eTriangle = 5);
+SAFE_ENUM_TYPE_DECLARE(Shape8, unsigned char, 
+                       eCircle = 3, eSquare = 1, eTriangle = 5);
 
 //or a custom enum with extended functions
 struct Color_def {
