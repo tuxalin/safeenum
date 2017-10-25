@@ -4,13 +4,6 @@ sudo: required
 dist: Rtrusty
 language: cpp
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - cmake
-
 matrix:
   include:
     - compiler: gcc
@@ -20,6 +13,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-5
+			- cmake
       env: COMPILER=g++-5
     - compiler: clang
       addons:
@@ -29,6 +23,7 @@ matrix:
             - llvm-toolchain-precise-3.6
           packages:
             - clang-3.6
+			- cmake
       env: COMPILER=clang++-3.6
     - compiler: clang
       addons:
@@ -38,10 +33,12 @@ matrix:
             - llvm-toolchain-precise-3.7
           packages:
             - clang-3.7
+			- cmake
       env: COMPILER=clang++-3.7
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
+  - cd test
   - (mkdir build && cd build && cmake ..)
 script:
   - cmake --version
