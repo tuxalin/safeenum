@@ -3,16 +3,16 @@
 
 #include "safe_enum_internal.h"
 
-#include <vector>
-#include <sstream>
 #include <cassert>
+#include <sstream>
+#include <vector>
 
 #ifdef SAFE_ENUM_USE_CPP11
-#include <unordered_map>
 #include <functional>
+#include <unordered_map>
 #else
-#include <tr1/unordered_map>
 #include <tr1/functional>
+#include <tr1/unordered_map>
 #endif
 
 namespace util
@@ -109,6 +109,7 @@ namespace util
 		/// @note Doesn't asserts if the value is incorrect.
 		template <typename T>
 		static SafeEnum fromUnsafe(T v);
+		static std::pair<bool, SafeEnum> fromString(const std::string& string);
 
 		static const std::string& toString(const SafeEnum& val);
 		static const std::string& toString(type val);
@@ -304,6 +305,12 @@ namespace util
 	}
 
 	ENUM_TEMPLATE
+		std::pair<bool, ENUM_QUAL> ENUM_QUAL::fromString(const std::string& string)
+	{
+		return def::format().findValue(string);
+	}
+
+	ENUM_TEMPLATE
 		const std::string& ENUM_QUAL::toString(const SafeEnum& val)
 	{
 		const std::string& ret = val.str();
@@ -475,6 +482,16 @@ namespace util
 					typename StringMap::const_iterator it = strings.find(mapVal);
 					assert(it != strings.end());
 					return it->second;
+				}
+
+				std::pair<bool, T>  findValue(const std::string& name) const
+				{
+					for (typename StringMap::const_iterator it = strings.begin(); it != strings.end(); ++it)
+					{
+						if (it->second == name)
+							return std::make_pair(true, it->first);
+					}
+					return std::make_pair(true, strings.begin()->first);
 				}
 
 				template <typename OtherType>

@@ -7,12 +7,12 @@
 #include <safe_enum.h>
 
 //normal declaration
-SAFE_ENUM_DECLARE(Shape, 
-                  eCircle, eSquare, eTriangle);
+SAFE_ENUM_DECLARE(Shape,
+	eCircle, eSquare, eTriangle);
 
 //or you can also declare an enum class using unsigned char
-SAFE_ENUM_TYPE_DECLARE(Shape8, unsigned char, 
-                       eCircle = 3, eSquare = 1, eTriangle = 5);
+SAFE_ENUM_TYPE_DECLARE(Shape8, unsigned char,
+	eCircle = 3, eSquare = 1, eTriangle = 5);
 
 //or a custom enum with extended functions
 struct Color_def {
@@ -34,10 +34,10 @@ int main()
 {
 	// C++11 enum classes type support, prints: 4 1
 	std::cout << sizeof(Shape) << " " << sizeof(Shape8) << "\n";
-	
+
 	// compile time enumeration count support, prints: 3 4
 	std::cout << Shape::Count << " " << Color::Count << "\n";
-	
+
 	// iterate through all enum values, prints: 0 1 2
 	for (Shape::iterator it = Shape::first(); it != Shape::last(); ++it)
 	{
@@ -70,6 +70,11 @@ int main()
 	//print ordinal, prints: 1
 	std::cout << shape.ordinal() << "\n";
 
+	//conversion from string, prints: 0 eCircle
+	std::pair<bool, Shape> res = Shape::fromString("eCircle");
+	std::cout << res.second.get() << " " << res.second.str() << "\n";
+	assert(res.first);
+
 	// using extended enums, prints: 1 0 0 1
 	for (Color::iterator it = Color::first(); it != Color::last(); ++it)
 	{
@@ -88,6 +93,6 @@ int main()
 	color |= Color::eGreen;  // will set to eYellow
 	color &= Color::eRed;  // will set to eRed
 	color &= Color::eBlue; // will assert
-	
+
 	return 0;
 }
