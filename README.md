@@ -1,4 +1,8 @@
-# SafeEnum [![Build Status](https://travis-ci.org/tuxalin/safeenum.svg?branch=master)](https://travis-ci.org/tuxalin/safeenum)
+# SafeEnum 
+[![Build Status](https://travis-ci.org/tuxalin/safeenum.svg?branch=master)](https://travis-ci.org/tuxalin/safeenum)
+[![Language](https://img.shields.io/badge/language-C++-blue.svg)](https://isocpp.org/)
+[![License](http://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+
 A type-safe, powerful enumeration implementation for C++ with features like automatic string conversion and iterators.
 
 ## Features
