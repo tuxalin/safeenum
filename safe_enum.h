@@ -66,8 +66,8 @@ namespace util
 
 			SafeEnum operator*() const;
 			const SafeEnum* operator->() const;
-			bool operator==(type other) const;
-			bool operator!=(type other) const;
+			bool operator==(SafeEnum other) const;
+			bool operator!=(SafeEnum other) const;
 			bool operator==(iterator other) const;
 			bool operator!=(iterator other) const;
 		};
@@ -341,14 +341,14 @@ namespace util
 	}
 
 	ENUM_TEMPLATE
-		bool ENUM_QUAL::iterator::operator==(type other) const
+		bool ENUM_QUAL::iterator::operator==(SafeEnum other) const
 	{
 		const iterator it = *this;
 		return *it == other;
 	}
 
 	ENUM_TEMPLATE
-		bool ENUM_QUAL::iterator::operator!=(type other) const
+		bool ENUM_QUAL::iterator::operator!=(SafeEnum other) const
 	{
 		return !this->operator==(other);
 	}
