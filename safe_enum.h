@@ -10,6 +10,7 @@
 #ifdef SAFE_ENUM_USE_CPP11
 #include <functional>
 #include <unordered_map>
+#include <type_traits>
 #else
 #include <tr1/functional>
 #include <tr1/unordered_map>
@@ -73,9 +74,26 @@ namespace util
 		typedef iterator iterator_t;
 
 		SafeEnum();
-		SafeEnum(type v);
+#ifdef SAFE_ENUM_USE_CPP11
+		template <typename T, typename std::enable_if<std::is_same<T, enum_type >::value>::type * = nullptr>
+		SafeEnum(T v) 
+			: val_(v)
+		{}
+
+		template <typename T, typename std::enable_if<std::is_integral<T>::value>::type * = nullptr>
+		explicit SafeEnum(T v)
+			: val_(static_cast<enum_type>(v))
+		{
+			SAFE_ENUM_ASSERT(def::format().validValue(v), "Invalid enum value!");
+		}
+#else
 		template <typename T>
-		explicit SafeEnum(T v);
+		explicit SafeEnum(T v)
+			: val_(static_cast<enum_type>(v))
+		{
+			SAFE_ENUM_ASSERT(def::format().validValue(v), "Invalid enum value!");
+		}
+#endif
 
 		iterator        begin() const;
 		static iterator end();
@@ -88,6 +106,7 @@ namespace util
 		template <typename CastType>
 		explicit operator CastType() const;
 #endif
+
 		template <typename T>
 		void set(T v);
 
@@ -101,8 +120,6 @@ namespace util
 		SafeEnum& operator|=(T bitmask);
 		SafeEnum& operator&=(SafeEnum bitmask);
 		SafeEnum& operator|=(SafeEnum bitmask);
-		template <typename T>
-		bool operator==(T val) const;
 
 		template <typename T>
 		static SafeEnum from(T v);
@@ -172,20 +189,6 @@ namespace util
 		ENUM_QUAL::SafeEnum()
 		: val_()
 	{
-	}
-
-	ENUM_TEMPLATE
-		ENUM_QUAL::SafeEnum(type v)
-		: val_(v)
-	{
-	}
-
-	ENUM_TEMPLATE
-		template <typename T>
-	ENUM_QUAL::SafeEnum(T v)
-		: val_(static_cast<type>(v))
-	{
-		SAFE_ENUM_ASSERT(def::format().validValue(v), "Invalid enum value!");
 	}
 
 	ENUM_TEMPLATE
@@ -280,13 +283,6 @@ namespace util
 		SAFE_ENUM_ASSERT(def::format().validValue(bitmask.get()), "Invalid bitmask for enum value!");
 		val_ = static_cast<type>(val_ | bitmask.get());
 		return *this;
-	}
-
-	ENUM_TEMPLATE
-		template <typename T>
-	bool ENUM_QUAL::operator==(T val) const
-	{
-		return val_ == val;
 	}
 
 	ENUM_TEMPLATE
