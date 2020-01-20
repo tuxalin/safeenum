@@ -103,8 +103,17 @@ namespace util
 
 		type get() const;
 #ifdef SAFE_ENUM_USE_CPP11
-		template <typename CastType>
-		explicit operator CastType() const;
+		template <typename T, typename std::enable_if<std::is_integral<T>::value>::type * = nullptr>
+		operator T() const
+		{
+			static_assert(std::is_same<T, enum_type>::value, "Invalid implicit cast");
+			return val_;
+		}
+
+		operator enum_type() const
+		{
+			return val_;
+		}
 #endif
 
 		template <typename T>
@@ -121,6 +130,12 @@ namespace util
 		SafeEnum& operator&=(SafeEnum bitmask);
 		SafeEnum& operator|=(SafeEnum bitmask);
 
+		template<typename T> 
+		T cast() const
+		{
+			return (T)val_;
+		}
+		
 		template <typename T>
 		static SafeEnum from(T v);
 		/// @note Doesn't asserts if the value is incorrect.
@@ -154,6 +169,55 @@ namespace util
 		friend bool operator>=(const SafeEnum& lhs, const SafeEnum& rhs)
 		{
 			return lhs.val_ >= rhs.val_;
+		}
+		// enum_type
+		friend bool operator==(const SafeEnum& lhs, enum_type rhs)
+		{
+			return lhs.val_ == rhs;
+		}
+		friend bool operator!=(const SafeEnum& lhs, enum_type rhs)
+		{
+			return lhs.val_ != rhs;
+		}
+		friend bool operator<(const SafeEnum& lhs, enum_type rhs)
+		{
+			return lhs.val_ < rhs;
+		}
+		friend bool operator<=(const SafeEnum& lhs, enum_type rhs)
+		{
+			return lhs.val_ <= rhs;
+		}
+		friend bool operator>(const SafeEnum& lhs, enum_type rhs)
+		{
+			return lhs.val_ > rhs;
+		}
+		friend bool operator>=(const SafeEnum& lhs, enum_type rhs)
+		{
+			return lhs.val_ >= rhs;
+		}
+		friend bool operator==(enum_type lhs, const SafeEnum& rhs)
+		{
+			return lhs == rhs.val_;
+		}
+		friend bool operator!=(enum_type lhs, const SafeEnum& rhs)
+		{
+			return lhs != rhs.val_;
+		}
+		friend bool operator<(enum_type lhs, const SafeEnum& rhs)
+		{
+			return lhs < rhs.val_;
+		}
+		friend bool operator<=(enum_type lhs, const SafeEnum& rhs)
+		{
+			return lhs <= rhs.val_;
+		}
+		friend bool operator>(enum_type lhs, const SafeEnum& rhs)
+		{
+			return lhs > rhs.val_;
+		}
+		friend bool operator>=(enum_type lhs, const SafeEnum& rhs)
+		{
+			return lhs >= rhs.val_;
 		}
 
 	private:
@@ -196,15 +260,6 @@ namespace util
 	{
 		return val_;
 	}
-
-#ifdef SAFE_ENUM_USE_CPP11
-	ENUM_TEMPLATE
-		template <typename CastType>
-	ENUM_QUAL::operator CastType() const
-	{
-		return val_;
-	}
-#endif
 
 	ENUM_TEMPLATE
 		typename ENUM_QUAL::iterator ENUM_QUAL::begin() const
